@@ -85,6 +85,7 @@ function App() {
         }}
       >
         <input
+          placeholder="할 일을 적어주세요"
           className="add-input"
           // Input의 제어권을 React(JS)가 가지고 있을 수 있게, state값을 주입했다.
           value={inputValue}

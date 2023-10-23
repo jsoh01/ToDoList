@@ -24,46 +24,51 @@ export const TodoItem = ({
   };
 
   return (
-    <div key={todo.id}>
-      <input
-        type="checkbox"
-        checked={todo.isDone}
-        onChange={(e) => {
-          onTodoListUpdate(todo.id, { isDone: e.target.checked });
-        }}
-      />
-      {updateTargetId === todo.id ? (
+    <div className="todo-item-container" key={todo.id}>
+      <div className="item">
         <input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          type="checkbox"
+          checked={todo.isDone}
+          onChange={(e) => {
+            onTodoListUpdate(todo.id, { isDone: e.target.checked });
+          }}
         />
-      ) : (
-        <span style={{ textDecoration: todo.isDone ? "line-through" : "" }}>
-          {todo.content}
-        </span>
-      )}
-      <Button
-        onClick={() => {
-          onTodoListDelete(todo.id);
-        }}
-        disabled={isUpdateMode}
-      >
-        DEL
-      </Button>
-      <Button
-        onClick={() => {
-          if (isUpdateMode) {
-            onTodoListUpdate(updateTargetId, { content: inputValue });
-            updateTarget(null);
-            return;
-          }
+        {updateTargetId === todo.id ? (
+          <input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+        ) : (
+          <span style={{ textDecoration: todo.isDone ? "line-through" : "" }}>
+            {todo.content}
+          </span>
+        )}
+      </div>
 
-          updateTarget(todo);
-        }}
-        disabled={isUpdateMode && todo.id !== updateTargetId}
-      >
-        UPDATE
-      </Button>
+      <div className="button-container">
+        <Button
+          onClick={() => {
+            onTodoListDelete(todo.id);
+          }}
+          disabled={isUpdateMode}
+        >
+          DEL
+        </Button>
+        <Button
+          onClick={() => {
+            if (isUpdateMode) {
+              onTodoListUpdate(updateTargetId, { content: inputValue });
+              updateTarget(null);
+              return;
+            }
+
+            updateTarget(todo);
+          }}
+          disabled={isUpdateMode && todo.id !== updateTargetId}
+        >
+          UPDATE
+        </Button>
+      </div>
     </div>
   );
 };
