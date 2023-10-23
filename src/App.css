@@ -52,7 +52,7 @@
   margin-top: 20px;
   width: full;
   padding: 10px 10px;
-  background-color: rgb(236, 12, 12);
+  background-color: white;
   border-radius: 20px;
 
   transition: all ease 1s;
@@ -71,10 +71,14 @@
   margin-top: 5px;
   width: 80%;
   height: 100%;
+  border: none;
+  outline: none;
+  padding: 5px 5px;
+  background-color: white;
 }
 
 .button {
-  background-color: rgb(243, 239, 13);
+  background-color: blue;
   border-radius: 10px;
 }
 
