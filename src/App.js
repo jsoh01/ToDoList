@@ -45,22 +45,22 @@ function App() {
       <h1 className="header">TODO LIST</h1>
       <div className="filter-container">
         <div>
-          <span>필터 : </span>
-          <RadioGroup
-            values={["ALL", "DONE", "NOT_DONE"]}
-            labels={["전체", "완료", "미완료"]}
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          />
-        </div>
-
-        <div>
           <span htmlFor="sort">정렬 : </span>
           <Select
             values={["NONE", "CREATED_AT", "CONTENT"]}
             labels={["생성순", "최신순", "가나다순"]}
             value={sort}
             onChange={(e) => setSort(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <span>필터 : </span>
+          <RadioGroup
+            values={["ALL", "DONE", "NOT_DONE"]}
+            labels={["전체", "완료", "미완료"]}
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
           />
         </div>
       </div>
@@ -94,7 +94,7 @@ function App() {
           }}
           disabled={isUpdateMode}
         />
-        <Button disabled={!inputValue || isUpdateMode}>{"ADD"}</Button>
+        <Button disabled={!inputValue || isUpdateMode}>{"추가"}</Button>
       </form>
 
       <div className="todo-list-container">
