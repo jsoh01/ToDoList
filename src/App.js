@@ -7,7 +7,12 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   const [todos, setTodos] = useState([]);
   const [sort, setSort] = useState("");
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("ALL");
+
+  const [updateValue, setUpdateValue] = useState("");
+  const [updateTargetIndex, setUpdateTargetIndex] = useState(-1);
+  /** computedValue */
+  const isUpdateMode = updateTargetIndex >= 0;
 
   const computedTodos = todos
     .filter((todo) => {
@@ -56,7 +61,25 @@ function App() {
           <option value="content">가나다순</option>
         </select>
       </div>
-      <div>
+      {/*
+      SPA(Single Page Application), CSR(client Side Rendering  <-> SSR, Server side rendering)
+      client가 dom그리기를 제어한다.
+      */}
+      <form
+        onSubmit={(e) => {
+          // form은 기본적으로 새로고침을 trigger, why? 새로운 html파일을 내려받아야하니까
+          e.preventDefault();
+          if (!inputValue) return;
+          const newTodo = {
+            id: uuid(),
+            content: inputValue,
+            isDone: false,
+            createdAt: Date.now(),
+          };
+          setTodos([...todos, newTodo]);
+          setInputValue("");
+        }}
+      >
         <input
           // Input의 제어권을 React(JS)가 가지고 있을 수 있게, state값을 주입했다.
           value={inputValue}
@@ -64,22 +87,10 @@ function App() {
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
+          disabled={isUpdateMode}
         />
-        <button
-          onClick={() => {
-            const newTodo = {
-              id: uuid(),
-              content: inputValue,
-              isDone: false,
-              createdAt: Date.now(),
-            };
-            setTodos([...todos, newTodo]);
-            setInputValue("");
-          }}
-        >
-          ADD
-        </button>
-      </div>
+        <button disabled={!inputValue || isUpdateMode}>{"ADD"}</button>
+      </form>
       <div>
         {computedTodos.map((todo, index) => (
           <div key={todo.id}>
@@ -93,16 +104,47 @@ function App() {
                 setTodos(nextTodos);
               }}
             />
-            <span style={{ textDecoration: todo.isDone ? "line-through" : "" }}>
-              {todo.content}
-            </span>
+            {updateTargetIndex === index ? (
+              <input
+                value={updateValue}
+                onChange={(e) => setUpdateValue(e.target.value)}
+              />
+            ) : (
+              <span
+                style={{ textDecoration: todo.isDone ? "line-through" : "" }}
+              >
+                {todo.content}
+              </span>
+            )}
             <button
               onClick={() => {
                 const nextTodos = todos.filter((_, idx) => idx !== index);
                 setTodos(nextTodos);
               }}
+              disabled={isUpdateMode}
             >
               DEL
+            </button>
+            <button
+              onClick={() => {
+                if (isUpdateMode) {
+                  const nextTodos = todos.map((todo, index) =>
+                    index === updateTargetIndex
+                      ? { ...todo, content: updateValue }
+                      : todo
+                  );
+                  setTodos(nextTodos);
+                  setUpdateValue("");
+                  setUpdateTargetIndex(-1);
+                  return;
+                }
+
+                setUpdateTargetIndex(index);
+                setUpdateValue(todo.content);
+              }}
+              disabled={isUpdateMode && index !== updateTargetIndex}
+            >
+              UPDATE
             </button>
           </div>
         ))}
